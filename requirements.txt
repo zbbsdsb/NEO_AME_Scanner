@@ -1,0 +1,15 @@
+# NEO_AME_Scanner 依赖项
+
+# 测试框架
+pytest==9.0.2
+
+# 3D处理库（根据需要选择）
+# open3d==0.18.0  # 如需使用Open3D
+# pyvista==0.43.0  # 如需使用PyVista
+
+# 数据处理
+numpy==1.26.0
+
+# 其他可能需要的库
+# scikit-learn==1.4.0  # 用于DBSCAN聚类
+# pandas==2.1.0  # 用于数据管理
