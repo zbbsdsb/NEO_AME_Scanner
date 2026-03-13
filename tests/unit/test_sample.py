@@ -1,5 +1,5 @@
 import pytest
-from src.input.models import Sample, SampleCollection
+from src.input.models import Sample, SampleCollection, SpatialEvidenceField
 
 # 测试用例1：创建Sample对象
 def test_sample_creation():
