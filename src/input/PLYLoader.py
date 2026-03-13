@@ -6,131 +6,131 @@ class PLYLoader:
     
     def load(self, file_path):
         """
-        加载PLY文件
+        Load PLY file
         
         Args:
-            file_path: PLY文件路径
+            file_path: PLY file path
             
         Returns:
-            list: 顶点坐标列表，每个元素为(x, y, z)元组
+            list: List of vertex coordinates, each element is (x, y, z) tuple
             
         Raises:
-            FileNotFoundError: 文件不存在
-            ValueError: 文件格式错误
+            FileNotFoundError: File not found
+            ValueError: File format error
         """
         self.file_path = file_path
         self.vertices = []
         
         try:
             with open(file_path, 'r') as f:
-                # 解析头部
+                # Parse header
                 header_info = self._parse_header(f)
                 vertex_count = header_info['vertex_count']
                 
-                # 读取顶点数据
+                # Read vertex data
                 self.vertices = self._read_vertices(f, vertex_count)
                 
-                # 验证顶点数量
+                # Validate vertex count
                 if len(self.vertices) != vertex_count:
-                    raise ValueError(f"顶点数量不匹配: 预期 {vertex_count}, 实际 {len(self.vertices)}")
+                    raise ValueError(f"Vertex count mismatch: expected {vertex_count}, actual {len(self.vertices)}")
                 
                 self.sample_count = len(self.vertices)
                 return self.vertices
                 
         except FileNotFoundError:
-            raise FileNotFoundError(f"文件不存在: {file_path}")
+            raise FileNotFoundError(f"File not found: {file_path}")
         except Exception as e:
-            raise ValueError(f"解析PLY文件失败: {str(e)}")
+            raise ValueError(f"Failed to parse PLY file: {str(e)}")
     
     def _parse_header(self, file):
         """
-        解析PLY文件头部
+        Parse PLY file header
         
         Args:
-            file: 文件对象
+            file: File object
             
         Returns:
-            dict: 头部信息，包含vertex_count等
+            dict: Header information, including vertex_count etc.
         """
         header_info = {}
         
-        # 读取第一行，验证文件类型
+        # Read first line, validate file type
         first_line = file.readline().strip()
         if first_line != 'ply':
-            raise ValueError("不是有效的PLY文件")
+            raise ValueError("Not a valid PLY file")
         
-        # 读取格式信息
+        # Read format information
         format_line = file.readline().strip()
         if not format_line.startswith('format ascii'):
-            raise ValueError("只支持ASCII格式的PLY文件")
+            raise ValueError("Only ASCII format PLY files are supported")
         
-        # 读取头部其他信息
+        # Read other header information
         while True:
             line = file.readline().strip()
             if line == 'end_header':
                 break
             
             if line.startswith('element vertex'):
-                # 提取顶点数量
+                # Extract vertex count
                 parts = line.split()
                 if len(parts) >= 3:
                     header_info['vertex_count'] = int(parts[2])
             
-            # 忽略其他头部信息
+            # Ignore other header information
         
         if 'vertex_count' not in header_info:
-            raise ValueError("PLY文件头部缺少顶点信息")
+            raise ValueError("PLY file header missing vertex information")
         
         return header_info
     
     def _read_vertices(self, file, vertex_count):
         """
-        读取顶点数据
+        Read vertex data
         
         Args:
-            file: 文件对象
-            vertex_count: 顶点数量
+            file: File object
+            vertex_count: Number of vertices
             
         Returns:
-            list: 顶点坐标列表
+            list: List of vertex coordinates
         """
         vertices = []
         
         for i in range(vertex_count):
             line = file.readline().strip()
             if not line:
-                raise ValueError(f"顶点数据不足，预期 {vertex_count} 个顶点")
+                raise ValueError(f"Insufficient vertex data, expected {vertex_count} vertices")
             
-            # 分割行数据
+            # Split line data
             parts = line.split()
             if len(parts) < 3:
-                raise ValueError(f"顶点数据格式错误，至少需要3个坐标值")
+                raise ValueError(f"Vertex data format error, at least 3 coordinate values are required")
             
             try:
-                # 只读取前三个值作为x, y, z坐标
+                # Only read first three values as x, y, z coordinates
                 x = float(parts[0])
                 y = float(parts[1])
                 z = float(parts[2])
                 vertices.append((x, y, z))
             except ValueError:
-                raise ValueError(f"顶点坐标值不是有效的数字")
+                raise ValueError(f"Vertex coordinate values are not valid numbers")
         
         return vertices
     
     def get_sample_count(self):
         """
-        获取样本数量
+        Get sample count
         
         Returns:
-            int: 样本数量
+            int: Number of samples
         """
         return self.sample_count
     
     def get_vertices(self):
         """
-        获取加载的顶点数据
+        Get loaded vertex data
         
         Returns:
-            list: 顶点坐标列表
+            list: List of vertex coordinates
         """
         return self.vertices
