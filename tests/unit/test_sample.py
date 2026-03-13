@@ -196,3 +196,110 @@ def test_sample_collection_add_non_sample():
     # 尝试添加非Sample对象
     with pytest.raises(TypeError):
         collection.add_sample("not a sample")
+
+# 测试用例13：SpatialEvidenceField创建和基本操作
+def test_spatial_evidence_field_creation():
+    """
+    测试SpatialEvidenceField创建和基本操作
+    """
+    # 创建SpatialEvidenceField
+    field = SpatialEvidenceField()
+    
+    # 验证初始状态
+    assert field.get_sample_count() == 0
+    assert field.get_bounds() is None
+    assert field.get_metadata() == {}
+
+# 测试用例14：SpatialEvidenceField添加样本
+def test_spatial_evidence_field_add_sample():
+    """
+    测试SpatialEvidenceField添加样本
+    """
+    # 创建SpatialEvidenceField
+    field = SpatialEvidenceField()
+    
+    # 创建Sample对象
+    sample1 = Sample(0.0, 0.0, 0.0)
+    sample2 = Sample(1.0, 1.0, 1.0)
+    
+    # 添加样本
+    field.add_sample(sample1)
+    field.add_sample(sample2)
+    
+    # 验证结果
+    assert field.get_sample_count() == 2
+    assert field.get_bounds() == {
+        'min_x': 0.0, 'max_x': 1.0,
+        'min_y': 0.0, 'max_y': 1.0,
+        'min_z': 0.0, 'max_z': 1.0
+    }
+
+# 测试用例15：SpatialEvidenceField添加样本集合
+def test_spatial_evidence_field_add_collection():
+    """
+    测试SpatialEvidenceField添加样本集合
+    """
+    # 创建SpatialEvidenceField
+    field = SpatialEvidenceField()
+    
+    # 创建SampleCollection
+    collection = SampleCollection()
+    collection.add_sample(Sample(0.0, 0.0, 0.0))
+    collection.add_sample(Sample(1.0, 1.0, 1.0))
+    
+    # 添加样本集合
+    field.add_samples_from_collection(collection)
+    
+    # 验证结果
+    assert field.get_sample_count() == 2
+
+# 测试用例16：SpatialEvidenceField元数据操作
+def test_spatial_evidence_field_metadata():
+    """
+    测试SpatialEvidenceField元数据操作
+    """
+    # 创建SpatialEvidenceField
+    field = SpatialEvidenceField()
+    
+    # 设置元数据
+    field.set_metadata('source', 'PLY file')
+    field.set_metadata('version', '1.0')
+    
+    # 验证元数据
+    metadata = field.get_metadata()
+    assert metadata['source'] == 'PLY file'
+    assert metadata['version'] == '1.0'
+
+# 测试用例17：SpatialEvidenceField转换为字典
+def test_spatial_evidence_field_to_dict():
+    """
+    测试SpatialEvidenceField转换为字典
+    """
+    # 创建SpatialEvidenceField
+    field = SpatialEvidenceField()
+    field.add_sample(Sample(0.0, 0.0, 0.0))
+    field.set_metadata('source', 'test')
+    
+    # 转换为字典
+    field_dict = field.to_dict()
+    
+    # 验证字典内容
+    assert field_dict['sample_count'] == 1
+    assert field_dict['metadata']['source'] == 'test'
+    assert len(field_dict['samples']) == 1
+
+# 测试用例18：SpatialEvidenceField错误处理
+def test_spatial_evidence_field_error_handling():
+    """
+    测试SpatialEvidenceField错误处理
+    """
+    # 创建SpatialEvidenceField
+    field = SpatialEvidenceField()
+    
+    # 尝试添加非Sample对象
+    with pytest.raises(TypeError):
+        field.add_sample("not a sample")
+    
+    # 尝试添加非SampleCollection对象
+    with pytest.raises(TypeError):
+        field.add_samples_from_collection("not a collection")
