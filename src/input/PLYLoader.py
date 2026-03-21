@@ -1,8 +1,11 @@
-class PLYLoader:
+from .BaseLoader import BaseLoader
+
+class PLYLoader(BaseLoader):
+    """
+    PLY 格式文件加载器
+    """
     def __init__(self):
-        self.vertices = []
-        self.sample_count = 0
-        self.file_path = None
+        super().__init__()
     
     def load(self, file_path):
         """
@@ -18,6 +21,9 @@ class PLYLoader:
             FileNotFoundError: File not found
             ValueError: File format error
         """
+        if not self._validate_file(file_path):
+            raise FileNotFoundError(f"File not found: {file_path}")
+        
         self.file_path = file_path
         self.vertices = []
         
@@ -116,21 +122,3 @@ class PLYLoader:
                 raise ValueError(f"Vertex coordinate values are not valid numbers")
         
         return vertices
-    
-    def get_sample_count(self):
-        """
-        Get sample count
-        
-        Returns:
-            int: Number of samples
-        """
-        return self.sample_count
-    
-    def get_vertices(self):
-        """
-        Get loaded vertex data
-        
-        Returns:
-            list: List of vertex coordinates
-        """
-        return self.vertices
