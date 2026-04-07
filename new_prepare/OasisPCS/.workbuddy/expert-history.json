@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "sessions": {
+    "7e2f68329a214d3f98562fc5bc977d51": [
+      {
+        "expertId": "AutonomousOptimizationArchitect",
+        "name": "Dan",
+        "profession": "自主优化架构师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect_zh.md",
+        "usedAt": 1775485334193,
+        "industryId": "all"
+      }
+    ]
+  },
+  "lastUpdated": 1775536521482
+}
